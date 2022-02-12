@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Justin Quinn",
+  "classifications": [ "Common", "Console" ],
+  "identity": "BetterConsoleUI",
+  "name": "Better Console UI",
+  "description": "A console application configured with Configuration, Logging and Dependency Injection.",
+  "shortName": "betterconsole",
+  "sourceName": "BetterConsoleUI",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": true
+}
