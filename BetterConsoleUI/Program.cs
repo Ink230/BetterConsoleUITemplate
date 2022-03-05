@@ -2,8 +2,8 @@
 {
   IConfiguration Configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile(@"AppSettings\appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"AppSettings\\appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production"}.json", optional: false, reloadOnChange: true)
+    .AddJsonFile(@"AppSettings/appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"AppSettings/appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production"}.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables()
     .AddCommandLine(args)
     .Build();
