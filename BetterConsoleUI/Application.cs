@@ -1,4 +1,5 @@
 ﻿namespace App;
+
 public class Application
 {
   private readonly IConfiguration _config;
@@ -9,7 +10,8 @@ public class Application
     _config = config;
     _logger = logger;
   }
-  public async Task Run()
+
+  public async Task RunAsync()
   {
     //Do something, ex:
     Console.WriteLine(Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT"));

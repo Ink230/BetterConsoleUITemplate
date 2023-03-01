@@ -1,34 +1,34 @@
 ﻿try
 {
-  IConfiguration Configuration = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile(@"AppSettings/appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"AppSettings/appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production"}.json", optional: false, reloadOnChange: true)
-    .AddEnvironmentVariables()
-    .AddCommandLine(args)
-    .Build();
-
-  Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(Configuration)
-    .Enrich.FromLogContext()
-    .Enrich.WithMachineName()
-    .CreateLogger();
-
   Log.Information("Initializing services...");
 
   IHost host = Host.CreateDefaultBuilder()
+    .ConfigureAppConfiguration((context, configBuilder) =>
+    {
+      configBuilder
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile(@"AppSettings/appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile($"AppSettings/appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production"}.json", optional: false, reloadOnChange: true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args);
+    })
+    .UseSerilog((context, configuration) =>
+    {
+      configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .Enrich.FromLogContext()
+        .Enrich.WithMachineName();
+    })
     .ConfigureServices((context, services) =>
     {
-      services.AddSingleton(Log.Logger);
-      services.AddSingleton(Configuration);
       services.AddTransient<Application>();
     })
     .Build();
 
   Log.Information("Application starting...");
 
-    //Start the app entry point
-    await (host?.Services?.GetService<Application>()?.Run() ?? throw new Exception("Invalid service initialization."));
+  //Start the app entry point
+  await (host?.Services?.GetService<Application>()?.RunAsync() ?? throw new Exception("Invalid service initialization."));
 
   Log.Information("Application closing...");
 }
